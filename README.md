@@ -1,34 +1,45 @@
-# WEB-APP
+# labs
 
-Task Manager web application built on a minimal socket-based Java HTTP framework (course: Security of Web Applications).
+Course labs for Security of Web Applications, kept in one Gradle project. Every lab is a package under `src/main/java`, and each one builds on a minimal, socket-based Java HTTP framework (the `lib` package inside it, which is never modified).
 
-| Folder | Lab | What it adds |
-|---|---|---|
-| `lab2/` | Lab 2.1 | RESTful CRUD API (`/tasks`) and an HTML/JS frontend on the provided framework |
-| `lab3/` | Lab 2.2 | Everything from Lab 2.1, plus HTTP cookie state management (server-set `Set-Cookie`, client-side JavaScript reads and writes cookies) |
+| Lab | Package | What it is | Run |
+|---|---|---|---|
+| 2.1 | `com.vizja.swp.lab2` | Task Manager: REST CRUD API (`/tasks`) and an HTML/JS frontend | `./gradlew runLab2` |
+| 2.2 | `com.vizja.lab3` | Same app plus HTTP cookie state management (server-set cookies, client-side JavaScript reads and writes them) | `./gradlew runLab3` |
 
-The framework code lives in each project's `lib/` package and is unmodified. Application code is in the `controller/`, `model/` and `repository/` packages plus `Application.java` / `App.java`.
+Both labs listen on <http://localhost:8080>, so run one at a time. On Windows use `gradlew.bat`.
 
-## API (`/tasks`)
-
-| Method | Purpose | Body |
-|---|---|---|
-| `GET` | List tasks | none |
-| `POST` | Create a task (201) | `{"title","description?","status?"}` |
-| `PUT` | Update a task | `{"id","title?","description?","status?"}` |
-| `DELETE` | Delete a task (204) | `{"id"}` |
-
-The framework matches exact paths only, so the task `id` travels in the JSON body rather than in the URL.
-
-## Cookies (Lab 2.2)
-
-On every `GET /` the server sets `visits`, `lastVisit` and `prevVisit`. The page script reads them to show a welcome-back banner. A `theme` cookie is written by JavaScript to remember dark mode. The cookies are intentionally not `HttpOnly` so the script can read them; they hold no credentials, and incoming values are validated server-side.
-
-## Run
+## Layout
 
 ```
-cd lab3             # or lab2
-./gradlew build     # compiles the project
+.
+|-- build.gradle, settings.gradle       one build for every lab (Lombok plugin, SLF4J, Jackson 3)
+|-- gradlew, gradlew.bat, gradle/       Gradle 8.14 wrapper
+|-- src/main/
+|   |-- java/com/vizja/
+|   |   |-- swp/lab2/                   Lab 2.1: Application, controller, model, repository, lib (framework)
+|   |   `-- lab3/                       Lab 2.2: App, controller, model, repository, lib (framework)
+|   `-- resources/simplelogger.properties
+|-- http/                               ready-made requests for IntelliJ's HTTP client (lab2.http, lab3.http)
+|-- docs/                               lab2-README.md, lab3-README.md (architecture, API, cookies, verification)
+|-- submissions/                        the ZIPs that were handed in (application code only, no framework)
+`-- Class resources/                    course preparation reading and course lists
 ```
 
-The provided `build.gradle` has no `run` task, so start the app by running the `App` class (lab3) or `Application` class (lab2) from your IDE. Then open <http://localhost:8080>. Use JDK 17-21 with the bundled Gradle 8.14 wrapper.
+Each lab has its own copy of the framework in its own `lib` package (the labs ship slightly different framework versions), so the labs never interfere with each other. Application code is everything outside `lib/`.
+
+## Build and run
+
+Requires JDK 17-21 (the bundled Gradle 8.14 supports up to Java 24).
+
+```bash
+./gradlew build        # compile everything
+./gradlew runLab2      # or runLab3
+```
+
+You can also open this folder as a Gradle project in IntelliJ and run `com.vizja.swp.lab2.Application` (Lab 2.1) or `com.vizja.lab3.App` (Lab 2.2) directly.
+
+## More detail
+
+- [Lab 2.1 notes](docs/lab2-README.md): structure, REST API, frontend, known gaps
+- [Lab 2.2 notes](docs/lab3-README.md): request flow, cookie lifecycle, client-side script, verification, security notes

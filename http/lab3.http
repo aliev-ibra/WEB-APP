@@ -1,0 +1,45 @@
+### Lab 2.2 - Task Manager with cookies
+### Start it first:  ./gradlew runLab3   (or run com.vizja.lab3.App)
+
+### First visit: the response carries three Set-Cookie headers (visits, lastVisit, prevVisit)
+GET http://localhost:8080/
+
+### Return visit: send the cookies back, the server answers with visits=2 and prevVisit=<old lastVisit>
+GET http://localhost:8080/
+Cookie: visits=1; lastVisit=1700000000000
+
+### Tampered cookie values are sanitised (visits=abc becomes 1)
+GET http://localhost:8080/
+Cookie: visits=abc; lastVisit=-5
+
+### CRUD still works exactly as in Lab 2.1
+GET http://localhost:8080/tasks
+
+###
+POST http://localhost:8080/tasks
+Content-Type: application/json
+
+{
+  "title": "Try cookies",
+  "status": "IN_PROGRESS"
+}
+
+###
+PUT http://localhost:8080/tasks
+Content-Type: application/json
+
+{
+  "id": 5,
+  "status": "DONE"
+}
+
+###
+DELETE http://localhost:8080/tasks
+Content-Type: application/json
+
+{
+  "id": 5
+}
+
+### Unknown paths return 404 in the Lab 2.2 framework
+GET http://localhost:8080/nope

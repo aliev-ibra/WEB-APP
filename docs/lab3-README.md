@@ -1,6 +1,6 @@
 # Lab 2.2 - Task Manager with HTTP Cookie State Management
 
-A task-management web application running on a minimal, socket-based Java HTTP server. This lab continues the Lab 2.1 REST application (`../lab2`) and adds **cookie-based state management**: the server issues cookies, and the page's JavaScript reads and writes them to change what the user sees.
+A task-management web application running on a minimal, socket-based Java HTTP server. This lab continues the Lab 2.1 REST application (see [lab2-README.md](lab2-README.md)) and adds **cookie-based state management**: the server issues cookies, and the page's JavaScript reads and writes them to change what the user sees.
 
 > HTTP is stateless. Cookies are how a stateless protocol "remembers" a browser between requests. This project shows the complete cookie round trip on top of hand-parsed HTTP.
 
@@ -41,12 +41,13 @@ A task-management web application running on a minimal, socket-based Java HTTP s
 ## Project structure
 
 ```
-lab3/
-|-- build.gradle                 provided (unmodified)
-|-- settings.gradle              provided
+labs/                            (repository root, one Gradle project shared with Lab 2.1)
+|-- build.gradle                 Lab 2.2 build file plus a runLab3 task (see the root README)
+|-- settings.gradle
 |-- gradlew, gradlew.bat, gradle/wrapper/   Gradle 8.14 wrapper
+|-- http/lab3.http               ready-made requests for IntelliJ's HTTP client
 `-- src/main/
-    |-- java/com/vizja/lab3/
+    |-- java/com/vizja/lab3/     (this lab; Lab 2.1 lives in com/vizja/swp/lab2)
     |   |-- App.java                       entry point: registers routes, seeds data, starts the server
     |   |-- controller/
     |   |   |-- HomeController.java        GET /  -> HTML page + issues the visit cookies
@@ -171,16 +172,13 @@ All user-supplied text (titles and descriptions) is HTML-escaped before it is in
 
 **Requirements:** JDK 17-21 (Gradle 8.14, bundled as the wrapper, supports up to Java 24) and internet access for the first dependency download.
 
-The provided `build.gradle` has no `run` task, so there are two options:
+From the repository root:
 
-1. **From an IDE (recommended):** open the `lab3` folder as a Gradle project and run the `com.vizja.lab3.App` class.
-2. **Compile with Gradle:**
+```bash
+./gradlew runLab3      # Windows: gradlew.bat runLab3
+```
 
-   ```bash
-   ./gradlew build        # Windows: gradlew.bat build
-   ```
-
-   then run `com.vizja.lab3.App` from your IDE, or start it with `java -cp` using the compiled classes plus the dependencies (`slf4j-api`, `slf4j-simple`, `jackson-databind` 3.0.0, `jackson-core`, `jackson-annotations`).
+or open the root folder as a Gradle project in your IDE and run the `com.vizja.lab3.App` class. Lab 2.1 shares port 8080, so run only one lab at a time.
 
 Then open <http://localhost:8080>. The server listens on port `8080` (set in `App.java`). Data is kept in memory and seeded with four sample tasks on every start.
 

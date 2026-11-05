@@ -1,0 +1,43 @@
+### Lab 2.1 - Task Manager REST API
+### Start it first:  ./gradlew runLab2   (or run com.vizja.swp.lab2.Application)
+
+### List all tasks
+GET http://localhost:8080/tasks
+
+### Create a task
+POST http://localhost:8080/tasks
+Content-Type: application/json
+
+{
+  "title": "Review lab submission",
+  "description": "Check README and zip structure",
+  "status": "TODO"
+}
+
+### Update a task (use an id returned by the list request)
+PUT http://localhost:8080/tasks
+Content-Type: application/json
+
+{
+  "id": 1,
+  "status": "DONE"
+}
+
+### Delete a task
+DELETE http://localhost:8080/tasks
+Content-Type: application/json
+
+{
+  "id": 1
+}
+
+### Validation: blank title returns 400
+POST http://localhost:8080/tasks
+Content-Type: application/json
+
+{
+  "title": "   "
+}
+
+### The HTML frontend
+GET http://localhost:8080/
